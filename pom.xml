@@ -92,7 +92,22 @@
       <artifactId>pcap4j-packetfactory-static</artifactId>
       <version>${pcap4j.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.github.weisj</groupId>
+      <artifactId>darklaf-core</artifactId>
+      <version>[2.0.3,)</version>
+    </dependency>
+    <dependency>
+      <!-- For the themes-->
+      <groupId>com.github.weisj</groupId>
+      <artifactId>darklaf-theme</artifactId>
+      <version>[2.0.3,)</version>
+    </dependency>
+    <dependency>
+      <groupId>com.apple</groupId>
+      <artifactId>AppleJavaExtensions</artifactId>
+      <version>1.4</version>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -102,6 +117,7 @@
   </dependencies>
 
   <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -133,13 +149,23 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <shadedClassifierName>standalone</shadedClassifierName>
               <transformers>
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>us.abstracta.wiresham.VirtualTcpServiceMain</Main-Class>
+                    <Main-Class>us.abstracta.wiresham.VirtualTcpServiceGUI</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>
@@ -148,6 +174,11 @@
         </executions>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+      </resource>
+    </resources>
   </build>
 
   <profiles>

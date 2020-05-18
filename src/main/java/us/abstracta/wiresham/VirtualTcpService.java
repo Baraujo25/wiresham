@@ -1,6 +1,7 @@
 package us.abstracta.wiresham;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -75,7 +76,11 @@ public class VirtualTcpService implements Runnable {
     if (sslEnabled) {
       server = SSLServerSocketFactory.getDefault().createServerSocket(port);
     } else {
-      server = new ServerSocket(port);
+      try {
+        server = new ServerSocket(port);
+      } catch (BindException e) {
+        LOG.error("Port {} is already in use", port);
+      }
     }
     serverExecutorService.submit(this);
   }
